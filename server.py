@@ -22,7 +22,8 @@ app = FastAPI()
 # Определяем маршрут для отображения заметок
 @app.get("/")
 async def show_notes():
-    return "Hello"
+    c.execute("SELECT * FROM users")
+    return c.fetchall()
 
 # Определяем маршрут для добавления заметки
 @app.post("/user/")

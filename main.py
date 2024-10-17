@@ -13,7 +13,7 @@ kb = KeyBindings()
 def exit(event):
     app.exit()
     if (len(buffer1.text) > 0):
-        requests.post("http://localhost:8000/user/", json={'text' : buffer1.text})
+        requests.post("http://127.0.0.1:8000/user", json={'text' : buffer1.text})
 
 
 @kb.add('c-s')
