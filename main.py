@@ -39,7 +39,7 @@ async def action_menu():
         values=[("delete", "Delete")],
     ).run_async()
     if result == "delete":
-        requests.delete(f"http://127.0.0.1:8000/note/delete/{id}")
+        requests.delete(f"https://messanger-u8ic.onrender.com/note/delete/{id}")
         buffer1.text = ""
         app.reset()
 
@@ -55,7 +55,7 @@ def get_title():
 def exit(event):
     title = get_title()
     if len(buffer1.text) > 0 and buffer1.text != "#FIRST LINE ALWAYS TITLE, DELETE THIS LINE":
-        requests.post("http://127.0.0.1:8000/note/", json={'title': title, 'text': buffer1.text})
+        requests.post("https://messanger-u8ic.onrender.com/note", json={'title': title, 'text': buffer1.text})
     app.exit()
 
 @kb.add('c-f')
@@ -66,7 +66,7 @@ def menu(event):
 def save_note(event):
     title = get_title()
     if len(buffer1.text) > 0 and buffer1.text != "#FIRST LINE ALWAYS TITLE, DELETE THIS LINE":
-        requests.post("http://127.0.0.1:8000/note/", json={'title': title, 'text': buffer1.text})
+        requests.post("https://messanger-u8ic.onrender.com/note/", json={'title': title, 'text': buffer1.text})
 
 
 @kb.add("c-i")
