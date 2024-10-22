@@ -9,12 +9,17 @@ import requests
 from prompt_toolkit.shortcuts import radiolist_dialog
 
 kb = KeyBindings()
-id = 0
+id = -1
+
+
+def save(id, title, text):
+    requests.post()
+
+
 
 
 async def main_menu():
-    posts = requests.get("http://127.0.0.1:8000/").json()
-    print(posts)
+    posts = requests.get("https://messanger-u8ic.onrender.com/").json()
     if not posts:  # Проверяем, пуст ли список
         posts = [[-1, "No data", "No data"]]  # Добавляем фиктивную запись
     result = await radiolist_dialog(
@@ -64,14 +69,29 @@ def menu(event):
 
 @kb.add('c-s')
 def save_note(event):
-    title = get_title()
-    if len(buffer1.text) > 0 and buffer1.text != "#FIRST LINE ALWAYS TITLE, DELETE THIS LINE":
-        requests.post("https://messanger-u8ic.onrender.com/note/", json={'title': title, 'text': buffer1.text})
-
+    global id
+    if id == -1:
+        title = get_title()
+        if len(buffer1.text) > 0 and buffer1.text != "#FIRST LINE ALWAYS TITLE, DELETE THIS LINE":
+            r = requests.post("https://messanger-u8ic.onrender.com/note/", json={'title': title, 'text': buffer1.text})
+            if r.status_code == 200:
+                data = r.json()
+                global id
+                id = data['note_id']
+    else:
+        title = get_title()
+        if len(buffer1.text) > 0 and buffer1.text != "#FIRST LINE ALWAYS TITLE, DELETE THIS LINE":
+            r = r = requests.post(f"https://messanger-u8ic.onrender.com/note/{id}", json={'title': title, 'text': buffer1.text})
 
 @kb.add("c-i")
 def a_menu(event):
     get_app().create_background_task(action_menu())
+
+@kb.add("c-n")
+def make_new(event):
+    global id
+    id = 0
+    buffer1.text = ""
 
 
 @kb.add('enter')

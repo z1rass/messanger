@@ -33,7 +33,26 @@ async def add_note(note: Note):
     # Используем правильное имя таблицы и передаем значение в качестве параметра
     c.execute("INSERT INTO notes (title, text) VALUES (?, ?)", (note.title, note.text,))
     con.commit()
-    return {"message": "Note added successfully"}
+    idshka = c.lastrowid
+
+    return {"message": "Note added successfully", "note_id": idshka}
+
+
+@app.put("/note/{note_id}")
+async def update_note(note_id: int, note: Note):
+    # Проверяем, существует ли заметка с данным ID
+    c.execute("SELECT id FROM notes WHERE id = ?", (note_id,))
+    existing_note = c.fetchone()
+
+    if existing_note is None:
+        return {"error": "Note not found"}, 404
+
+    # Обновляем заметку, если она существует
+    c.execute("UPDATE notes SET title = ?, text = ? WHERE id = ?", (note.title, note.text, note_id))
+    con.commit()
+
+    return {"message": "Note edited successfully"}
+
 
 @app.delete("/note/delete/{note_id}")
 async def add_note(note_id: int):
