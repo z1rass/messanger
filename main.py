@@ -76,22 +76,22 @@ def save_note(event):
             r = requests.post("https://messanger-u8ic.onrender.com/note/", json={'title': title, 'text': buffer1.text})
             if r.status_code == 200:
                 data = r.json()
-                global id
                 id = data['note_id']
     else:
         title = get_title()
         if len(buffer1.text) > 0 and buffer1.text != "#FIRST LINE ALWAYS TITLE, DELETE THIS LINE":
-            r = r = requests.post(f"https://messanger-u8ic.onrender.com/note/{id}", json={'title': title, 'text': buffer1.text})
+            r = requests.put(f"https://messanger-u8ic.onrender.com/note/{id}", json={'title': title, 'text': buffer1.text})
 
 @kb.add("c-i")
 def a_menu(event):
     get_app().create_background_task(action_menu())
 
-@kb.add("c-n")
+@kb.add("c-w")
 def make_new(event):
     global id
-    id = 0
+    id = -1
     buffer1.text = ""
+
 
 
 @kb.add('enter')
